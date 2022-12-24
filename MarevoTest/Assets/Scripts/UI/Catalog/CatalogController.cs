@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -29,6 +30,7 @@ namespace UI.Catalog
             foreach (DataRow row in data.Rows)
             {
                 var item = Instantiate(catalogItemPrefab, catalogItemsParent);
+                item.InitializeItem(Convert.ToInt32(row["Id"]));
                 item.SetLabelText(row["Id"].ToString());
             }
         }

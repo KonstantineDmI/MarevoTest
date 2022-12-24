@@ -16,7 +16,7 @@ namespace UI.Catalog
 
         public Action<int> OnSelectButtonClicked;
 
-        private int _id;
+        public int _id;
 
         private void OnDestroy()
         {
