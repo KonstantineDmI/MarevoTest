@@ -55,6 +55,25 @@ public class SpreadSheet : MonoBehaviour
 			}
 		}
 
+		ClearDataTable();
+
 		OnDataInitialized?.Invoke();
+	}
+
+	private void ClearDataTable()
+    {
+		for (int i = _dataTable.Rows.Count - 1; i >= 0; i--)
+		{
+			DataRow dataRow = _dataTable.Rows[i];
+			foreach(DataColumn column in _dataTable.Columns)
+            {
+				if(dataRow[column.ColumnName].ToString() == column.ColumnName)
+                {
+					dataRow.Delete();
+					break;
+                }
+            }
+		}
+		_dataTable.AcceptChanges();
 	}
 }

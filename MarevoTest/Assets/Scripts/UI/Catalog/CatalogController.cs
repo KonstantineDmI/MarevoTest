@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UI.ItemSettings;
 using UnityEngine;
 
@@ -25,12 +26,12 @@ namespace UI.Catalog
         private void Initialize()
         {
             var data = spreadSheet.GetDataTable();
-            foreach (var row in data.Rows)
+            foreach (DataRow row in data.Rows)
             {
-                foreach(var column in data.Columns)
+                foreach(DataColumn column in data.Columns)
                 {
                     var item = Instantiate(catalogItemPrefab, catalogItemsParent);
-                    item.SetLabelText(row.ToString());
+                    item.SetLabelText(row["Size"].ToString());
                 }
             }
         }
