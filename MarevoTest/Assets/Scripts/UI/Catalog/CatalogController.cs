@@ -28,11 +28,8 @@ namespace UI.Catalog
             var data = spreadSheet.GetDataTable();
             foreach (DataRow row in data.Rows)
             {
-                foreach(DataColumn column in data.Columns)
-                {
-                    var item = Instantiate(catalogItemPrefab, catalogItemsParent);
-                    item.SetLabelText(row["Size"].ToString());
-                }
+                var item = Instantiate(catalogItemPrefab, catalogItemsParent);
+                item.SetLabelText(row["Id"].ToString());
             }
         }
     }

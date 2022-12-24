@@ -35,19 +35,21 @@ public class SpreadSheet : MonoBehaviour
 
 	private void FillDataTable(string[] columns, string[] rows)
     {
+		_dataTable.Columns.Add("Id");
 		foreach (string columnName in rows[0].Split(','))
 		{
 			var clearName = new string(columnName.ToCharArray().Where(x => !Char.IsWhiteSpace(x)).ToArray());
 			_dataTable.Columns.Add(clearName);
 		}
 
-		foreach (string csvRow in rows)
+		for (int i = 0; i < rows.Length; i++)
 		{
-			if (!string.IsNullOrEmpty(csvRow))
+			if (!string.IsNullOrEmpty(rows[i]))
 			{
 				_dataTable.Rows.Add();
-				int count = 0;
-				foreach (string FileRec in csvRow.Split(','))
+				_dataTable.Rows[_dataTable.Rows.Count - 1][0] = i;
+				int count = 1;
+				foreach (string FileRec in rows[i].Split(','))
 				{
 					_dataTable.Rows[_dataTable.Rows.Count - 1][count] = FileRec;
 					count++;
