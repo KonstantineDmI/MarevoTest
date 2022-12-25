@@ -9,7 +9,7 @@ namespace UI.ItemSettings
 {
     public class SettingsWindowController : MonoBehaviour
     {
-
+        [SerializeField] ARController arController;
         [SerializeField] private SettingsWindowView settingsWindowView;
         [SerializeField] private ObjectsController objectController;
 
@@ -35,7 +35,7 @@ namespace UI.ItemSettings
             {
                 return;
             }
-
+            arController.DisableAR(false);
             objectController.SetTexture(_selectedId);
             objectController.SetScale(scale);
         }

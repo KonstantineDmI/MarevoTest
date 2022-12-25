@@ -7,6 +7,7 @@ namespace UI
 {
     public class BackButton : MonoBehaviour
     {
+        [SerializeField] private ARController arController;
         [SerializeField] private Button button;
         [SerializeField] private GameObject catalogGameObject;
 
@@ -23,6 +24,7 @@ namespace UI
         private void BackToCatalog()
         {
             catalogGameObject.SetActive(true);
+            arController.DisableAR(true);
         }
     }
 }
