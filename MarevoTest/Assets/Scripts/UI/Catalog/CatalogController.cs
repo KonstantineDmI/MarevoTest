@@ -1,3 +1,4 @@
+using Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,8 +32,15 @@ namespace UI.Catalog
             {
                 var item = Instantiate(catalogItemPrefab, catalogItemsParent);
                 item.InitializeItem(Convert.ToInt32(row["Id"]));
-                item.SetLabelText(row["Id"].ToString());
+                item.OnSelectButtonClicked += OpenSettingsWindow;
+                item.SetLabelText(row["Title"].ToString());
+                item.SetIcon(spreadSheet.GetTextureById(item.GetId()));
             }
+        }
+
+        private void OpenSettingsWindow(int id)
+        {
+            settingsWindowController.Open(id);
         }
     }
 }

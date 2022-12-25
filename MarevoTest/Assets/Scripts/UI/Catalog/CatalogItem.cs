@@ -16,7 +16,7 @@ namespace UI.Catalog
 
         public Action<int> OnSelectButtonClicked;
 
-        public int _id;
+        private int _id;
 
         private void OnDestroy()
         {
@@ -30,18 +30,25 @@ namespace UI.Catalog
             itemButton.onClick.AddListener(SelectItem);
         }
 
+        public int GetId()
+        {
+            return _id;
+        }
+
         public void SetLabelText(string text)
         {
             itemLabel.text = text;
         }
 
-        public void SetIcon(Sprite sprite)
+        public void SetIcon(Texture2D texture)
         {
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2());
             itemImage.sprite = sprite;
         }
 
         private void SelectItem()
         {
+            Debug.Log("clicked");
             OnSelectButtonClicked?.Invoke(_id);
         }
     }

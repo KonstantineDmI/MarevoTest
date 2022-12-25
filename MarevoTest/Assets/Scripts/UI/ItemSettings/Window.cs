@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.ItemSettings
 {
-    public class SettingsWindowView : MonoBehaviour
+    public abstract class Window : MonoBehaviour
     {
         [SerializeField] private GameObject windowGameObject;
         [SerializeField] private Button closeButton;
@@ -14,12 +14,14 @@ namespace UI.ItemSettings
 
         public event Action OnApply;
 
-        public void Open()
+        public virtual void Open(params object[] args)
         {
             windowGameObject.SetActive(true);
+            closeButton.onClick.AddListener(Close);
+            applyButton.onClick.AddListener(Apply);
         }
 
-        public void Close()
+        public virtual void Close()
         {
             windowGameObject.SetActive(false);
         }
