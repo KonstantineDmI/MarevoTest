@@ -1,3 +1,4 @@
+using Objects;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,30 +7,37 @@ using UnityEngine.UI;
 
 namespace UI.ItemSettings
 {
-    public class SettingsWindowController : Window
+    public class SettingsWindowController : MonoBehaviour
     {
-        [SerializeField] private TMP_InputField widthInput;
-        [SerializeField] private TMP_InputField letgthInput;
-        [SerializeField] private TMP_InputField depthInput;
+
+        [SerializeField] private SettingsWindowView settingsWindowView;
+        [SerializeField] private ObjectsController objectController;
 
         private int _selectedId;
 
-        public override void Open(params object[] args)
+        private void Awake()
         {
-            base.Open();
-            _selectedId = (int)args[0];
-            OnApply += StartARScene;
+            settingsWindowView.OnOpen += InitializeWindow;
         }
 
-        public override void Close()
+        private void InitializeWindow(int id)
         {
-            OnApply -= StartARScene;
-            base.Close();
+            Debug.Log("INITIALIZED");
+            _selectedId = id;
+            settingsWindowView.OnApply += StartARScene;
         }
 
         private void StartARScene()
         {
+            var scale = settingsWindowView.GetInputsData();
 
+            if(scale == Vector3.zero)
+            {
+                return;
+            }
+
+            objectController.SetTexture(_selectedId);
+            objectController.SetScale(scale);
         }
 
 

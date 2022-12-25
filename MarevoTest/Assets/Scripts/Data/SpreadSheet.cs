@@ -20,51 +20,57 @@ namespace Data
 
 		private TexturesHolder _texturesHolder = new TexturesHolder();
 
+		public event Action<int, int> OnItemInitialized;
+
 
 		private IEnumerator Start()
 		{
 			WWW webRequest = new WWW("https://docs.google.com/spreadsheet/ccc?key=" + spreadsheetKey + "&usp=sharing&output=csv");
 			yield return webRequest;
 			var csvData = webRequest.text;
-
 			string[] columns = csvData.Split(","[0]); ;
 			string[] rows = csvData.Split("\n"[0]);
 
 			FillDataTable(columns, rows);
 		}
 
-		public DataTable GetDataTable()
+        public DataTable GetDataTable()
 		{
 			return _dataTable;
 		}
 
-		public Texture2D GetTextureById(int id)
+		public Texture2D GetPreviewById(int id)
 		{
 			return _texturesHolder.entities.Find(x => x.id == id).previewTexture;
 		}
 
-		private IEnumerator LoadSpritesCoroutine()
+		public Texture2D GetTextureById(int id)
+		{
+			return _texturesHolder.entities.Find(x => x.id == id).mainTexture;
+		}
+
+		private IEnumerator LoadTexturesCoroutine()
 		{
 			for (int i = 0; i < _dataTable.Rows.Count; i++)
 			{
-				string url = _dataTable.Rows[i]["Preview"].ToString();
-				if (string.IsNullOrWhiteSpace(url))
-				{
-					continue;
-				}
-				UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
-				yield return www.SendWebRequest();
+				string urlPreview = _dataTable.Rows[i]["Preview"].ToString();
+				string urlTexture = _dataTable.Rows[i]["Texture"].ToString();
+				UnityWebRequest previewRequest = UnityWebRequestTexture.GetTexture(urlPreview);
+				UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(urlTexture);
+				yield return previewRequest.SendWebRequest();
+				yield return textureRequest.SendWebRequest();
 
-				if (www.isNetworkError || www.isHttpError)
-				{
-					Debug.LogError(www.error);
+				if (previewRequest.isNetworkError || previewRequest.isHttpError ||
+					textureRequest.isNetworkError || textureRequest.isHttpError)
+                {
 					continue;
 				}
 				else
 				{
-					Debug.Log("here");
-					Texture2D texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-					_texturesHolder.entities.Add(new TextureHolderEntity{id = Convert.ToInt32(_dataTable.Rows[i]["Id"]), previewTexture = texture, mainTexture = null });
+					Texture2D texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+					Texture2D preview = ((DownloadHandlerTexture)previewRequest.downloadHandler).texture;
+					_texturesHolder.entities.Add(new TextureHolderEntity{id = Convert.ToInt32(_dataTable.Rows[i]["Id"]), previewTexture = preview, mainTexture = texture});
+					OnItemInitialized?.Invoke(_texturesHolder.entities.Count, _dataTable.Rows.Count);
 				}
 			}
 
@@ -95,7 +101,7 @@ namespace Data
 				}
 			}
 			ClearDataTable();
-			StartCoroutine(LoadSpritesCoroutine());
+			StartCoroutine(LoadTexturesCoroutine());
 		}
 
 		private void ClearDataTable()
