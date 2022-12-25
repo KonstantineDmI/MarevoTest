@@ -12,7 +12,7 @@ public class FlexibleGridLayout : LayoutGroup
     public Vector2 spacing;
 
 
-    public override void CalculateLayoutInputVertical()
+    public override void CalculateLayoutInputHorizontal()
     {
         base.CalculateLayoutInputHorizontal();
 
@@ -23,7 +23,7 @@ public class FlexibleGridLayout : LayoutGroup
         float parentWidth = rectTransform.rect.width;
         float parentHeight = rectTransform.rect.height;
 
-        float cellWidth = (parentWidth / (float)columns) - ((spacing.x/(float)columns) * 2);
+        float cellWidth = (parentWidth / (float)columns) - ((spacing.x / (float)columns) * 2);
         float cellHeight = parentHeight / (float)rows - ((spacing.y / (float)rows) * 2);
 
         cellSize.x = cellWidth;
@@ -32,7 +32,7 @@ public class FlexibleGridLayout : LayoutGroup
         int columnCount = 0;
         int rowCount = 0;
 
-        for(int i = 0; i < rectChildren.Count; i++)
+        for (int i = 0; i < rectChildren.Count; i++)
         {
             rowCount = i / columns;
             columnCount = i % columns;
@@ -43,6 +43,10 @@ public class FlexibleGridLayout : LayoutGroup
             SetChildAlongAxis(item, 0, xPos, cellSize.x);
             SetChildAlongAxis(item, 1, yPos, cellSize.y);
         }
+    }
+    public override void CalculateLayoutInputVertical()
+    {
+        
     }
 
     public override void SetLayoutHorizontal()

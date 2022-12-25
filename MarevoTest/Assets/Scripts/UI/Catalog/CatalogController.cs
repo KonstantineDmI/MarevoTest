@@ -10,10 +10,11 @@ namespace UI.Catalog
 {
     public class CatalogController : Window
     {
-        [SerializeField] private Transform catalogItemsParent;
+        [SerializeField] private RectTransform catalogItemsParent;
         [SerializeField] private CatalogItem catalogItemPrefab;
         [SerializeField] private SettingsWindowView settingsWindowView;
         [SerializeField] private SpreadSheet spreadSheet;
+        [SerializeField] private float scale;
 
         private void Start()
         {
@@ -37,6 +38,11 @@ namespace UI.Catalog
                 item.OnSelectButtonClicked += OpenSettingsWindow;
                 item.SetLabelText(row["Title"].ToString());
                 item.SetIcon(spreadSheet.GetPreviewById(item.GetId()));
+
+                if (catalogItemsParent.childCount > 8 && catalogItemsParent.childCount % 2 == 0)
+                {
+                    catalogItemsParent.sizeDelta += new Vector2(0, scale);
+                }
             }
         }
 
