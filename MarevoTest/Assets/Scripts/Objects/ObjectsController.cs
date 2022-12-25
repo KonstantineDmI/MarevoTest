@@ -12,8 +12,11 @@ namespace Objects
         [SerializeField] private ObjectInteraction objectInteraction;
         [SerializeField] private SpreadSheet data;
 
+        private Vector3 _initialPosition;
+
         private void Start()
         {
+            _initialPosition = objectModel.transform.position;
             objectInteraction.Initialize(objectModel.transform);
         }
 
@@ -26,6 +29,11 @@ namespace Objects
         public void SetScale(Vector3 scale)
         {
             objectModel.transform.localScale = scale / 100;
+        }
+
+        public void ResetPosition()
+        {
+            objectModel.transform.position = _initialPosition;
         }
     }
 }

@@ -38,6 +38,7 @@ namespace UI.ItemSettings
             arController.DisableAR(false);
             objectController.SetTexture(_selectedId);
             objectController.SetScale(scale);
+            objectController.ResetPosition();
         }
 
 
